@@ -68,7 +68,7 @@ var resolvers = [
             var result = text.match(splitPageRegex);
             var rawEntries = result[3];
             var entries = rawEntries.split('&#8364;') // split on euro-sign
-                .map(function(rawEntry) { return rawEntry.fulltrim(); })
+                .map(function(rawEntry) { return rawEntry.replace(/\*/, '').fulltrim(); })
                 .filter(function(rawEntry) { return rawEntry.length > 0; })
                 .map(function(rawEntry) { return rawEntry + ' &#8364;'; });
 
