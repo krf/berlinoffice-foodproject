@@ -61,6 +61,7 @@ var App = function() {
      *  Populate the cache.
      */
     self.populateCache = function() {
+        return;
         if (typeof self.zcache === "undefined") {
             self.zcache = { 'index.html': '' };
         }
@@ -117,6 +118,11 @@ var App = function() {
      */
     self.createRoutes = function() {
         self.routes = {};
+
+        self.routes['/'] = function(req, res) {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(self.cache_get('index.html') );
+        };
 
         self.routes['/results'] = function(req, res) {
             res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
@@ -210,11 +216,14 @@ var App = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.server = express.createServer();
+        self.server.configure(function() {
+            self.server.use(express.static(__dirname + '/public'))
+        });
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
-            self.app.get(r, self.routes[r]);
+            self.server.get(r, self.routes[r]);
         }
     };
 
@@ -237,7 +246,7 @@ var App = function() {
      */
     self.start = function() {
         //  Start the app on the specific interface (and port).
-        self.app.listen(self.port, self.ipaddress, function() {
+        self.server.listen(self.port, self.ipaddress, function() {
             console.log('%s: Node server started on http://%s:%d ...',
                         Date(Date.now() ), self.ipaddress, self.port);
         });

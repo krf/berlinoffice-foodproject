@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="berlinoffice-foodproject : " />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script>
+        $.getJSON("/json/results", function (json) {
+            var html = '';
+            $.each(json.results, function (i, result) {
+                if (result.error) {
+                    html += '<p>Error: ' + result.error + '</p>';
+                }
+
+                html += '<h4>' + result.name + (result.date ? ' (Stand: ' + result.date + ')' : '') + '</h4>\n';
+                if (result.entries) {
+                    html += '<ul>';
+                    $.each(result.entries, function(i, entry) {
+                        html += '<li>' + entry + '</li>';
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<p>No entries.</p>';
+                }
+            });
+
+            $('#menus').html(html);
+        });
+    </script>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>berlinoffice-foodproject</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://openshift.redhat.com/app/console/application/foodproject">View on OpenShift.com</a>
+
+          <h1 id="project_title">berlinoffice-foodproject</h1>
+          <h2 id="project_tagline">Der Teller ist rund - Nach dem Essen ist vor dem Essen</h2>
+
+          <!--
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/krf/berlinoffice-foodproject/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/krf/berlinoffice-foodproject/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+          -->
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>Tageskarten</h3>
+        <section id="menus">
+        </section>
+        <h3>Restaurants</h3>
+
+        <ul>
+          <li><a href="http://www.wau-berlin.de/">Wirtshaus am Ufer</a> [<a href="http://www.wau-berlin.de/Tages-Abendkarte">Tageskarte</a>]</li>
+          <li><a href="http://www.qype.com/place/2298139-Little-Saigon-Berlin">Goldenes Dreieck</a> [<a href="./menus/goldenes_dreieck.pdf">Speisekarte (PDF)</a>]</li>
+          <li><a href="http://www.restaurant-so.de/">Restaurant So</a> [<a href="http://www.restaurant-so.de/deutsch/speisekarte.htm">Speisekarte</a>, <a href="http://www.restaurant-so.de/deutsch/tageskarte.htm">Tageskarte</a>]</li>
+          <li><a href="http://www.cafe-rundum.de/">Cafe Rundum</a> [<a href="http://www.cafe-rundum.de/deutsch/speisekarte.html">Tageskarte</a>]</li>
+          <li><a href="http://www.qype.com/place/123069-3-Moms-Berlin">3 Moms</a></li>
+        </ul>
+        <section>
+            <div style="margin: 25px" class="inner">
+            <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=food+near+tempelhofer+ufer+11,+berlin&amp;aq=&amp;sll=52.498115,13.38641&amp;sspn=0.008831,0.016265&amp;ie=UTF8&amp;hq=food&amp;hnear=Tempelhofer+Ufer+11,+10963+Berlin,+Germany&amp;t=m&amp;ll=52.498119,13.386412&amp;spn=0.009144,0.018239&amp;z=15&amp;output=embed"></iframe><br /><small><a href="http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=food+near+tempelhofer+ufer+11,+berlin&amp;aq=&amp;sll=52.498115,13.38641&amp;sspn=0.008831,0.016265&amp;ie=UTF8&amp;hq=food&amp;hnear=Tempelhofer+Ufer+11,+10963+Berlin,+Germany&amp;t=m&amp;ll=52.498119,13.386412&amp;spn=0.009144,0.018239&amp;z=15" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+            </div>
+        </section>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <!--
+        <p>Want to update this page? Send a <a href="https://github.com/krf/berlinoffice-foodproject/tree/gh-pages">Pull-Request</a>!</p>
+        -->
+        <p class="copyright">berlinoffice-foodproject maintained by <a href="http//kfunk.org">Kevin Funk</a></p>
+        <p>Published using <a href="https://www.openshift.com/">https://www.openshift.com/</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
+
+<!-- kate: indent-width: 2 -->
