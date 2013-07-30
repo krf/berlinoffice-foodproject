@@ -141,7 +141,7 @@ var App = function() {
         self.routes['/json/results'] = function(req, res) {
             res.writeHead(200, {'Content-Type': 'application/json; charset=UTF-8'});
 
-            async.map(resolvers.resolvers, callService, function(err, results) {
+            async.map(resolvers.resolvers, callResolver, function(err, results) {
                 var json = {
                     error: err,
                     results: results
