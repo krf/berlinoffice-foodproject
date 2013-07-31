@@ -125,43 +125,50 @@ var App = function() {
         };
 
         self.routes['/results'] = function(req, res) {
-            res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
+            var format = req.query.format ? req.query.format : 'json';
 
             async.map(resolvers.resolvers, callResolver, function(err, results) {
-                if (err) {
-                    res.write('<h1>Error</h1>\n');
-                    res.write('Error: ' + err);
-                    res.end()
-                    return
-                }
-
                 console.log("Results:");
                 console.dir(results);
 
-                // print results
-                renderResults(res, results);
-                res.end();
+                switch (format) {
+                case 'json':
+                    renderResults_JSON(res, err, results);
+                    break;
+                case 'html':
+                    renderResults_HTML(res, err, results);
+                    break;
+                default:
+                    res.writeHead(400); // Bad request
+                    res.end('Bad request');
+                }
             });
         }
 
-        self.routes['/json/results'] = function(req, res) {
+        function renderResults_JSON(res, err, results) {
             res.writeHead(200, {'Content-Type': 'application/json; charset=UTF-8'});
 
-            async.map(resolvers.resolvers, callResolver, function(err, results) {
-                var json = {
-                    error: err,
-                    results: results
-                };
-
-                var jsonString = JSON.stringify(json);
-                res.write(jsonString);
-                res.end();
-            });
+            var json = {
+                error: err,
+                results: results
+            };
+            var jsonString = JSON.stringify(json);
+            res.write(jsonString);
+            res.end();
         }
 
-        function renderResults(res, results) {
-            res.write('<h1>Results</h1\n');
-            res.write('<p>Up-to-date menus</p>');
+        function renderResults_HTML(res, err, results) {
+            res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
+
+            if (err) {
+                res.write('<h1>Error</h1>\n');
+                res.write('Error: ' + err);
+                res.end()
+                return
+            }
+
+            res.write('<h1>Menus</h1\n');
+            res.write('<p></p>');
             results.forEach(function(result) {
                 res.write("<h2>" + result.name + "</h2>\n");
                 if (result.error) {
@@ -181,6 +188,7 @@ var App = function() {
                     res.write('<p>No entries.</p>');
                 }
             });
+            res.end();
         }
 
         function callResolver(resolver, callback) {

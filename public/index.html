@@ -8,7 +8,7 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script>
-        $.getJSON("/json/results", function (json) {
+        $.getJSON("/results?format=json", function (json) {
             var html = '';
             $.each(json.results, function (i, result) {
                 if (result.error) {
@@ -91,7 +91,13 @@
         <!--
         <p>Want to update this page? Send a <a href="https://github.com/krf/berlinoffice-foodproject/tree/gh-pages">Pull-Request</a>!</p>
         -->
-        <p>Menus are available in <a href="/json/results">JSON format</a></p>
+        <p>Menus are available in <a href="/results?format=json">JSON format</a> or in <a href="/results?format=html">HTML format</a></p>
+        <p>This site uses
+            <a href="http://nodejs.org">node.js</a> as backend (with modules such as:
+                <a href="https://github.com/MatthewMueller/cheerio">cheerio</a>,
+                <a href="https://github.com/caolan/async">async</a>),
+            <a href="http://jquery.com">jQuery</a> on the client-side for retrieving JSON via Ajax calls.
+        </p>
         <p class="copyright">berlinoffice-foodproject maintained by <a href="http://kfunk.org">Kevin Funk</a></p>
         <p>Published using <a href="https://www.openshift.com/">https://www.openshift.com/</a></p>
       </footer>
