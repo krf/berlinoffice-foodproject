@@ -16,6 +16,11 @@
                 }
 
                 html += '<h4>' + result.name + (result.date ? ' (Stand: ' + result.date + ')' : '') + '</h4>\n';
+                if (result.info) {
+                    html += '<div class="alert-box notice">';
+                    html += '<span>Information: </span>' + result.info;
+                    html += '</div>';
+                }
                 if (result.entries) {
                     html += '<ul>';
                     $.each(result.entries, function(i, entry) {
