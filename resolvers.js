@@ -23,9 +23,9 @@ var resolvers = [
                     // header found
                     currentSection++;
                     if (currentSection == 0) {
-                        var result = $(this).text().match(dateRegex);
-                        if (result) {
-                            date = result[1];
+                        var match = $(this).text().match(dateRegex);
+                        if (match) {
+                            date = match[1];
                         }
                     }
                 } else {
@@ -65,17 +65,18 @@ var resolvers = [
             var splitPageRegex = /Tageskarte f&uuml;r den ([0-9\.]+)\s+\*([^\*]+)\*\s+(\*.+)$/;
             // get the raw text, fully cleaned up from whitespace
             var text = util.stripHTML(data).replace(/&nbsp;/g,'').fulltrim();
-            var result = text.match(splitPageRegex);
-            var rawEntries = result[3];
+            var match = text.match(splitPageRegex);
+            var rawEntries = match[3];
             var entries = rawEntries.split('&#8364;') // split on euro-sign
                 .map(function(rawEntry) { return rawEntry.replace(/\*/, '').fulltrim(); })
                 .filter(function(rawEntry) { return rawEntry.length > 0; })
                 .map(function(rawEntry) { return rawEntry + ' &#8364;'; });
 
+            console.dir(match);
             result = {};
             result.name = this.name;
-            result.date = result[1];
-            result.info = result[2];
+            result.date = match[1];
+            result.info = match[2].fulltrim();
             result.entries = entries;
             return result;
         }
