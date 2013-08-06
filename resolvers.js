@@ -57,6 +57,9 @@ var resolvers = [
             body: null,
         },
         parse: function(service, data) {
+            result = {};
+            result.name = this.name;
+
             // unfortunately restaurant-so's HTML is *completely* messed up
             // there's no clear DOM structure, so we need to parse the content based
             // on the visual text
@@ -66,15 +69,17 @@ var resolvers = [
             // get the raw text, fully cleaned up from whitespace
             var text = util.stripHTML(data).replace(/&nbsp;/g,'').fulltrim();
             var match = text.match(splitPageRegex);
+            if (!match) {
+                result.error = 'Failed to parse webpage';
+                return result;
+            }
+
             var rawEntries = match[3];
             var entries = rawEntries.split('&#8364;') // split on euro-sign
                 .map(function(rawEntry) { return rawEntry.replace(/\*/, '').fulltrim(); })
                 .filter(function(rawEntry) { return rawEntry.length > 0; })
                 .map(function(rawEntry) { return rawEntry + ' &#8364;'; });
 
-            console.dir(match);
-            result = {};
-            result.name = this.name;
             result.date = match[1];
             result.info = match[2].fulltrim();
             result.entries = entries;
