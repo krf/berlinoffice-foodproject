@@ -7,6 +7,7 @@ var fs      = require('fs');
 var http    = require('follow-redirects').http;
 var StringDecoder = require('string_decoder').StringDecoder;
 var url     = require('url');
+var _       = require("underscore");
 
 var resolvers = require('./resolvers');
 
@@ -197,7 +198,12 @@ var App = function() {
                     buffer += decoder.write(chunk);
                 });
                 res.on('end', function() {
-                    result = resolver.parse(resolver, buffer);
+                    resolverResult = resolver.parse(resolver, buffer);
+
+                    result = {}
+                    result.name = resolver.name;
+                    result.link = resolver.link;
+                    _.extend(result, resolverResult);
                     callback(null, result);
                 });
             }).on('error', function(e) {

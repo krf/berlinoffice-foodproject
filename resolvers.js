@@ -4,6 +4,7 @@ var util = require('./util');
 var resolvers = [
     {
         name: 'www.cafe-rundum.de',
+        link: 'http://www.cafe-rundum.de/deutsch/speisekarte.html',
         request: {
             options: {
                 host: 'www.cafe-rundum.de',
@@ -41,7 +42,6 @@ var resolvers = [
             });
 
             result = {}
-            result.name = this.name;
             result.date = date;
             result.entries = entries;
             return result;
@@ -49,6 +49,7 @@ var resolvers = [
     },
     {
         name: 'www.restaurant-so.de',
+        link: 'http://www.restaurant-so.de/deutsch/tageskarte.htm',
         request: {
             options: {
                 host: 'www.restaurant-so.de',
@@ -58,7 +59,6 @@ var resolvers = [
         },
         parse: function(service, data) {
             result = {};
-            result.name = this.name;
 
             // unfortunately restaurant-so's HTML is *completely* messed up
             // there's no clear DOM structure, so we need to parse the content based
@@ -87,6 +87,7 @@ var resolvers = [
     },
     {
         name: 'www.wau-berlin.de',
+        link: 'http://www.wau-berlin.de/Tages-Abendkarte',
         request: {
             options: {
                 host: 'www.wau-berlin.de',
@@ -113,7 +114,6 @@ var resolvers = [
             });
 
             result = {}
-            result.name = this.name;
             result.entries = entries;
             return result;
         }

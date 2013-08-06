@@ -10,7 +10,10 @@
         $.getJSON("/results?format=json", function (json) {
             var html = '';
             $.each(json.results, function (i, result) {
-                html += '<h4>' + result.name + (result.date ? ' (Stand: ' + result.date + ')' : '') + '</h4>\n';
+                html += '<h4>' +
+                    (result.link ? '<a href="' + result.link + '">' + result.name + '</a>': result.name) +
+                    (result.date ? ' (Stand: ' + result.date + ')' : '') +
+                    '</h4>\n';
                 if (result.error) {
                     html += '<div class="alert-box error">';
                     html += '<span>Error: </span>' + result.error;
