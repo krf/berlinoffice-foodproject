@@ -65,7 +65,7 @@ var resolvers = [
             // on the visual text
 
             // capture groups: (date, information, string containing the menu)
-            var splitPageRegex = /Tageskarte f&uuml;r den ([0-9\.]+)\s+\*([^\*]+)\*\s+(\*.+)$/;
+            var splitPageRegex = /Tageskarte f&uuml;r den ([0-9\.]+)\s+(\*.+)$/;
             // get the raw text, fully cleaned up from whitespace
             var text = util.stripHTML(data).replace(/&nbsp;/g,'').fulltrim();
             var match = text.match(splitPageRegex);
@@ -74,14 +74,13 @@ var resolvers = [
                 return result;
             }
 
-            var rawEntries = match[3];
+            var rawEntries = match[2];
             var entries = rawEntries.split('&#8364;') // split on euro-sign
                 .map(function(rawEntry) { return rawEntry.replace(/\*/, '').fulltrim(); })
                 .filter(function(rawEntry) { return rawEntry.length > 0; })
                 .map(function(rawEntry) { return rawEntry + ' &#8364;'; });
 
             result.date = match[1];
-            result.info = match[2].fulltrim();
             result.entries = entries;
             return result;
         }
