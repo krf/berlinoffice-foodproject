@@ -128,9 +128,6 @@ var App = function() {
             var format = req.query.format ? req.query.format : 'json';
 
             async.map(resolvers.resolvers, callResolver, function(err, results) {
-                console.log("Results:");
-                console.dir(results);
-
                 switch (format) {
                 case 'json':
                     renderResults_JSON(res, err, results);
