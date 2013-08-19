@@ -7,26 +7,27 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script>
-        $.getJSON("/results?format=json", function (json) {
+        $.getJSON("/query?format=json", function (json) {
             var html = '';
             $.each(json.results, function (i, result) {
+                data = result.data;
                 html += '<h4>' +
                     (result.link ? '<a href="' + result.link + '">' + result.name + '</a>': result.name) +
-                    (result.date ? ' (Stand: ' + result.date + ')' : '') +
+                    (data.date ? ' (Stand: ' + data.date + ')' : '') +
                     '</h4>\n';
-                if (result.error) {
+                if (data.error) {
                     html += '<div class="alert-box error">';
-                    html += '<span>Error: </span>' + result.error;
+                    html += '<span>Error: </span>' + data.error;
                     html += '</div>';
                 }
-                if (result.info) {
+                if (data.info) {
                     html += '<div class="alert-box notice">';
-                    html += '<span>Information: </span>' + result.info;
+                    html += '<span>Information: </span>' + data.info;
                     html += '</div>';
                 }
-                if (result.entries) {
+                if (data.entries) {
                     html += '<ul>';
-                    $.each(result.entries, function(i, entry) {
+                    $.each(data.entries, function(i, entry) {
                         html += '<li>' + entry + '</li>';
                     });
                     html += '</ul>';
@@ -99,7 +100,7 @@
         <!--
         <p>Want to update this page? Send a <a href="https://github.com/krf/berlinoffice-foodproject/tree/gh-pages">Pull-Request</a>!</p>
         -->
-        <p>Menus are available in <a href="/results?format=json">JSON format</a> or in <a href="/results?format=html">HTML format</a></p>
+        <p>Menus are available in <a href="/query?format=json">JSON format</a> or in <a href="/query?format=html">HTML format</a></p>
         <p>This site uses
             <a href="http://nodejs.org">node.js</a> as backend (with modules such as:
                 <a href="https://github.com/MatthewMueller/cheerio">cheerio</a>,

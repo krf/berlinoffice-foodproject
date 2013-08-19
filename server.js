@@ -125,7 +125,7 @@ var App = function() {
             res.send(self.cache_get('index.html') );
         };
 
-        self.routes['/results'] = function(req, res) {
+        self.routes['/query'] = function(req, res) {
             var format = req.query.format ? req.query.format : 'json';
 
             async.map(resolvers.resolvers, callResolver, function(err, results) {
@@ -190,6 +190,14 @@ var App = function() {
         }
 
         function callResolver(resolver, callback) {
+            function createResult(resolver, data) {
+                result = {};
+                result.name = resolver.name;
+                result.link = resolver.link;
+                result.data = data;
+                return result;
+            }
+
             req = http.request(resolver.request.options, function(res) {
                 var decoder = new StringDecoder('utf8');
 
@@ -198,18 +206,15 @@ var App = function() {
                     buffer += decoder.write(chunk);
                 });
                 res.on('end', function() {
-                    resolverResult = resolver.parse(resolver, buffer);
-
-                    result = {}
-                    result.name = resolver.name;
-                    result.link = resolver.link;
-                    _.extend(result, resolverResult);
+                    data = resolver.parse(resolver, buffer);
+                    result = createResult(resolver, data);
                     callback(null, result);
                 });
             }).on('error', function(e) {
                 errorMessage = 'Failed to fetch URL: ' + url + '. Message: ' + e.message;
                 console.warn('Error: ' + errorMessage);
-                callback(null, {error: errorMessage})
+                result = createResult(resolver, {error: errorMessage});
+                callback(null, result);
             });
 
             if (resolver.request.body) {
