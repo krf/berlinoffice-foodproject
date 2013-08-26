@@ -151,9 +151,10 @@ var App = function() {
             res.write('Last update: ' + (result.date ? result.date : 'Unknown'));
 
             // print entries
-            if (result.entries) {
+            data = result.data
+            if (data.entries) {
                 res.write('<ul>\n');
-                result.entries.forEach(function(entry) {
+                data.entries.forEach(function(entry) {
                     res.write("<li>" + entry + "</li>\n");
                 });
                 res.write("</ul>\n");
