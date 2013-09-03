@@ -106,15 +106,22 @@ var resolvers = [
             var rawEntries = $('div.project_content')
                 .html().split(/<br[^>]*>\s*<br[^>]*>/gi);
             var entries = rawEntries.map(function(rawEntry) {
-                return rawEntry.fulltrim();
-            }).filter(function(rawEntry) {
-                return rawEntry.length > 0
-                    && !rawEntry.contains('TAGESKARTE')
-                    && !rawEntry.contains('ABENDKARTE');
-            });
+                return rawEntry.fulltrim()});
+
+            var filteredEntries = [];
+            for (var i = 0; i < entries.length; ++i) {
+                entry = entries[i];
+                if (entry.contains('TAGESKARTE')) {
+                    continue; // skip
+                }
+                if (entry.contains('ABENDKARTE')) {
+                    break;
+                }
+                filteredEntries.push(entry);
+            }
 
             result = {}
-            result.entries = entries;
+            result.entries = filteredEntries;
             return result;
         }
     }
