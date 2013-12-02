@@ -114,8 +114,11 @@ var resolvers = [
                 if (entry.contains('TAGESKARTE')) {
                     continue; // skip
                 }
+                if (entry === "") {
+                    continue; // skip empty entries
+                }
                 if (entry.contains('ABENDKARTE')) {
-                    break;
+                    break; // abort, we're not interested in the ABENDKARTE
                 }
                 filteredEntries.push(entry);
             }
