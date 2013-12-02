@@ -1,3 +1,14 @@
-The OpenShift `nodejs` cartridge documentation can be found at:
+berlinoffice-foodproject
+===
 
-https://github.com/openshift/origin-server/tree/master/cartridges/openshift-origin-cartridge-nodejs/README.md
+Running locally
+---
+
+    $ node server.js
+
+You should get some output along 'Node server started at http://example.com'.
+
+If you want to make node automatically reload the js files in case anything changes,
+use https://github.com/remy/nodemon:
+
+    $ nodemon server.js
