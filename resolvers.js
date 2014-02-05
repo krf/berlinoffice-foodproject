@@ -13,31 +13,29 @@ var resolvers = [
             body: null
         },
         parse: function(service, data) {
-            var dateRegex = /\w+, ([0-9\.]+)/;
+            // capture groups: (date)
+            var startMenuSectionRegex = /\w+, ([0-9\.]+)/;
+            var endMenuSectionString = "unsere salate";
 
             $ = cheerio.load(data);
             var entries = [];
             var date = null;
-            var currentSection = -1;
+            var inMenuSection = false;
             $('#content').find('tr').each(function(i, elem) {
                 if ($(this).find('strong').length > 0) {
-                    // header found
-                    currentSection++;
-                    if (currentSection == 0) {
-                        var match = $(this).text().match(dateRegex);
-                        if (match) {
-                            date = match[1];
-                        }
+                    if (match = $(this).text().match(startMenuSectionRegex)) {
+                        // menu section found
+                        inMenuSection = true;
+                        date = match[1];
+                    } else if ($(this).text().contains(endMenuSectionString)) {
+                        return false; // break out each-loop
                     }
-                } else {
-                    // entry found - only push items in case we're in section 0
-                    if (currentSection == 0) {
-                        var text = $(this).text().fulltrim().replace(/&nbsp;/g,'');
-                        if (text.length > 0) {
-                            entries.push(text);
-                        }
+                } else if (inMenuSection) {
+                    // entry found - only push items in case we're in the menu section
+                    var text = $(this).text().fulltrim().replace(/&nbsp;/g,'');
+                    if (text.length > 0) {
+                        entries.push(text);
                     }
-
                 }
             });
 
