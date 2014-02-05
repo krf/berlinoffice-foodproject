@@ -207,7 +207,7 @@ var App = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.server = express.createServer();
+        self.server = express();
         self.server.configure(function() {
             self.server.use(express.static(__dirname + '/public'))
         });
