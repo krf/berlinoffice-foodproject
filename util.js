@@ -1,5 +1,21 @@
 var sanitizer = require("sanitizer");
 
+if (typeof String.prototype.fulltrim !== 'function') {
+    String.prototype.fulltrim = function() {
+        return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
+    };
+}
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+if (typeof String.prototype.contains !== 'function') {
+    String.prototype.contains = function(it) {
+        return this.indexOf(it) != -1;
+    };
+}
+
 function stripHTML(html) {
     var clean = sanitizer.sanitize(html, function (str) {
         return str;

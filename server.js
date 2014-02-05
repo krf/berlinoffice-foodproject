@@ -11,23 +11,6 @@ var _       = require("underscore");
 
 var resolvers = require('./resolvers');
 
-if (typeof String.prototype.fulltrim !== 'function') {
-    String.prototype.fulltrim = function() {
-        return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
-    };
-}
-if (typeof String.prototype.trim !== 'function') {
-    String.prototype.trim = function() {
-        return this.replace(/^\s+|\s+$/g, '');
-    }
-}
-if (typeof String.prototype.contains !== 'function') {
-    String.prototype.contains = function(it) {
-        return this.indexOf(it) != -1;
-    };
-}
-
-
 /**
  *  Define the sample application.
  */
@@ -35,7 +18,6 @@ var App = function() {
 
     //  Scope.
     var self = this;
-
 
     /*  ================================================================  */
     /*  Helper functions.                                                 */
@@ -57,7 +39,6 @@ var App = function() {
         };
     };
 
-
     /**
      *  terminator === the termination handler
      *  Terminate server on receipt of the specified signal.
@@ -71,7 +52,6 @@ var App = function() {
         }
         console.log('%s: Node server stopped.', Date(Date.now()) );
     };
-
 
     /**
      *  Setup termination handlers (for exit and a list of signals).
@@ -87,7 +67,6 @@ var App = function() {
             process.on(element, function() { self.terminator(element); });
         });
     };
-
 
     /*  ================================================================  */
     /*  App server functions (main app logic here).                       */
@@ -200,7 +179,6 @@ var App = function() {
         req.end();
     }
 
-
     /**
      *  Initialize the server (express) and create the routes and register
      *  the handlers.
@@ -218,7 +196,6 @@ var App = function() {
         }
     };
 
-
     /**
      *  Initializes the sample application.
      */
@@ -229,7 +206,6 @@ var App = function() {
         // Create the express server and routes.
         self.initializeServer();
     };
-
 
     /**
      *  Start the server (starts up the sample application).
@@ -243,8 +219,6 @@ var App = function() {
     };
 
 };   /*  Sample Application.  */
-
-
 
 /**
  *  main():  Main code.
