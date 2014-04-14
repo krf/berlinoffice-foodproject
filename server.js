@@ -15,6 +15,7 @@ var resolvers = require('./resolvers');
  *  Define the sample application.
  */
 var App = function() {
+    var CACHE_PERIOD = 5 * 60 * 1000; // ms
 
     //  Scope.
     var self = this;
@@ -81,7 +82,7 @@ var App = function() {
         self.routes['/query'] = function(req, res) {
             var format = req.query.format ? req.query.format : 'json';
 
-            async.map(resolvers.resolvers, callResolver, function(err, results) {
+            async.map(resolvers.resolvers, getResult, function(err, results) {
                 switch (format) {
                 case 'json':
                     renderResults_JSON(res, err, results);
@@ -96,6 +97,22 @@ var App = function() {
             });
         }
     };
+
+    function getResult(resolver, callback) {
+        var cacheEntry = self.cache[resolver.name];
+        if (cacheEntry) {
+            if (cacheEntry.timestamp > (new Date().getTime() - CACHE_PERIOD)) {
+                // cache hit, return cached result
+                cacheEntry.cached = true;
+                return callback(null, cacheEntry);
+            }
+
+            // entry out of date, remove
+            delete cacheEntry;
+        }
+
+        return callResolver(resolver, callback);
+    }
 
     function renderResults_JSON(res, err, results) {
         res.writeHead(200, {'Content-Type': 'application/json; charset=UTF-8'});
@@ -150,6 +167,7 @@ var App = function() {
             result.name = resolver.name;
             result.link = resolver.link;
             result.data = data;
+            result.timestamp = new Date().getTime();
             return result;
         }
 
@@ -163,6 +181,7 @@ var App = function() {
             res.on('end', function() {
                 data = resolver.parse(resolver, buffer);
                 result = createResult(resolver, data);
+                self.cache[resolver.name] = result
                 callback(null, result);
             });
         }).on('error', function(e) {
@@ -184,6 +203,7 @@ var App = function() {
      *  the handlers.
      */
     self.initializeServer = function() {
+        self.cache = {};
         self.createRoutes();
         self.server = express();
         self.server.configure(function() {
