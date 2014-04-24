@@ -17,6 +17,9 @@ var resolvers = require('./resolvers');
 var App = function() {
     var CACHE_PERIOD = 5 * 60 * 1000; // ms
 
+    // In-memory key-value store
+    var db = {};
+
     //  Scope.
     var self = this;
 
@@ -95,6 +98,29 @@ var App = function() {
                     res.end('Bad request');
                 }
             });
+        }
+
+        // A very simple hit counter
+        self.routes['/analytics/stats'] = function(req, res) {
+            // enter hit into store
+            var date = new Date;
+            var day = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
+            var keys = [
+                "hits-by-day:" + day,
+            ];
+            keys.map(function(key) {
+                var count = (key in db ? db[key] : 0);
+                db[key] = count+1;
+            });
+
+            // convenience entries
+            db["hits-today"] = db["hits-by-day:" + day]
+
+            // write out stats
+            res.writeHead(200, {'Content-Type': 'application/json; charset=UTF-8'});
+            var jsonString = JSON.stringify(db);
+            res.write(jsonString);
+            res.end();
         }
     };
 

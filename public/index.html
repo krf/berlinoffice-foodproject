@@ -38,6 +38,10 @@
 
             $('#menus').html(html);
         });
+
+        $.getJSON("/analytics/stats", function (json) {
+            $('#stats').html("Page hits today: " + json["hits-today"]);
+        });
     </script>
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
@@ -101,6 +105,7 @@
         <p>Want to update this page? Send a <a href="https://github.com/krf/berlinoffice-foodproject/tree/gh-pages">Pull-Request</a>!</p>
         -->
         <p>Menus are available in <a href="/query?format=json">JSON format</a> or in <a href="/query?format=html">HTML format</a></p>
+        <p id="stats"/>
         <p>This site uses
             <a href="http://nodejs.org">node.js</a> as backend (with modules such as:
                 <a href="https://github.com/MatthewMueller/cheerio">cheerio</a>,
