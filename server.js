@@ -2,12 +2,10 @@
 
 var async   = require('async');
 var express = require('express');
-var fs      = require('fs');
 // use drop-in replacement for http module to follow redirects, see: http://syskall.com/how-to-follow-http-redirects-in-node-dot-js/
 var http    = require('follow-redirects').http;
 var StringDecoder = require('string_decoder').StringDecoder;
 var url     = require('url');
-var _       = require("underscore");
 
 var resolvers = require('./resolvers');
 

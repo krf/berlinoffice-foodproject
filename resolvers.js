@@ -1,5 +1,6 @@
 var cheerio = require('cheerio');
-var util = require('./util');
+var util    = require('./util');
+var _       = require("underscore");
 
 var resolvers = [
     {
