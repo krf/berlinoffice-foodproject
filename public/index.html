@@ -7,7 +7,7 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script>
-        $.getJSON("/query?format=json", function (json) {
+        $.getJSON("/json/query", function (json) {
             var html = '';
             $.each(json.results, function (i, result) {
                 data = result.data;
@@ -39,8 +39,8 @@
             $('#menus').html(html);
         });
 
-        $.getJSON("/analytics/stats", function (json) {
-            $('#stats').html("Page hits today: " + json["hits-today"]);
+        $.getJSON("/json/pagehit", function (json) {
+            $('#stats').html(json["hits-today"] + " page hits today");
         });
     </script>
 
@@ -58,15 +58,7 @@
 
           <h1 id="project_title">berlinoffice-foodproject</h1>
           <h2 id="project_tagline">Der Teller ist rund - Nach dem Essen ist vor dem Essen</h2>
-
-          <!--
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/krf/berlinoffice-foodproject/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/krf/berlinoffice-foodproject/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-          -->
         </header>
-
     </div>
 
     <!-- MAIN CONTENT -->
@@ -101,11 +93,8 @@
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <!--
-        <p>Want to update this page? Send a <a href="https://github.com/krf/berlinoffice-foodproject/tree/gh-pages">Pull-Request</a>!</p>
-        -->
-        <p>Menus are available in <a href="/query?format=json">JSON format</a> or in <a href="/query?format=html">HTML format</a></p>
-        <p id="stats"/>
+        <p>Statistics: <span id="stats"/></p>
+        <p>JSON API: <a href="/json/query">query</a> | <a href="/json/stats">stats</a></p>
         <p>This site uses
             <a href="http://nodejs.org">node.js</a> as backend (with modules such as:
                 <a href="https://github.com/MatthewMueller/cheerio">cheerio</a>,

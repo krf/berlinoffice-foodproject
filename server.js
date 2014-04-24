@@ -82,47 +82,43 @@ var App = function() {
     self.createRoutes = function() {
         self.routes = {};
 
-        self.routes['/query'] = function(req, res) {
-            var format = req.query.format ? req.query.format : 'json';
-
+        self.routes['/json/query'] = function(req, res) {
             async.map(resolvers.resolvers, getResult, function(err, results) {
-                switch (format) {
-                case 'json':
-                    renderResults_JSON(res, err, results);
-                    break;
-                case 'html':
-                    renderResults_HTML(res, err, results);
-                    break;
-                default:
-                    res.writeHead(400); // Bad request
-                    res.end('Bad request');
-                }
+                res.json({
+                    error: err,
+                    results: results
+                });
             });
         }
 
-        // A very simple hit counter
-        self.routes['/analytics/stats'] = function(req, res) {
-            // enter hit into store
-            var date = new Date;
-            var day = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
-            var keys = [
-                "hits-by-day:" + day,
-            ];
-            keys.map(function(key) {
-                var count = (key in db ? db[key] : 0);
-                db[key] = count+1;
-            });
+        self.routes['/json/pagehit'] = function(req, res) {
+            // count visiting this path as page hit
+            enterPageHit(req);
 
-            // convenience entries
-            db["hits-today"] = db["hits-by-day:" + day]
+            res.json(db);
+        }
 
-            // write out stats
-            res.writeHead(200, {'Content-Type': 'application/json; charset=UTF-8'});
-            var jsonString = JSON.stringify(db);
-            res.write(jsonString);
-            res.end();
+        self.routes['/json/stats'] = function(req, res) {
+            res.json(db);
         }
     };
+
+    /// A very simple hit counter
+    function enterPageHit(req) {
+        // enter hit into store
+        var date = new Date;
+        var day = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
+        var keys = [
+            "hits-by-day_" + day,
+        ];
+        keys.map(function(key) {
+            var count = (key in db ? db[key] : 0);
+            db[key] = count+1;
+        });
+
+        // convenience entries
+        db["hits-today"] = db["hits-by-day_" + day]
+    }
 
     function getResult(resolver, callback) {
         var cacheEntry = self.cache[resolver.name];
@@ -138,53 +134,6 @@ var App = function() {
         }
 
         return callResolver(resolver, callback);
-    }
-
-    function renderResults_JSON(res, err, results) {
-        res.writeHead(200, {'Content-Type': 'application/json; charset=UTF-8'});
-
-        var json = {
-            error: err,
-            results: results
-        };
-        var jsonString = JSON.stringify(json);
-        res.write(jsonString);
-        res.end();
-    }
-
-    function renderResults_HTML(res, err, results) {
-        res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
-
-        if (err) {
-            res.write('<h1>Error</h1>\n');
-            res.write('Error: ' + err);
-            res.end()
-            return
-        }
-
-        res.write('<h1>Menus</h1\n');
-        res.write('<p></p>');
-        results.forEach(function(result) {
-            res.write("<h2>" + result.name + "</h2>\n");
-            if (result.error) {
-                res.write('<p>Error: ' + result.error + '</p>')
-            }
-
-            res.write('Last update: ' + (result.date ? result.date : 'Unknown'));
-
-            // print entries
-            data = result.data
-            if (data.entries) {
-                res.write('<ul>\n');
-                data.entries.forEach(function(entry) {
-                    res.write("<li>" + entry + "</li>\n");
-                });
-                res.write("</ul>\n");
-            } else {
-                res.write('<p>No entries.</p>');
-            }
-        });
-        res.end();
     }
 
     function callResolver(resolver, callback) {
