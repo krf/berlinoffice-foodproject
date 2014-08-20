@@ -126,6 +126,44 @@ var resolvers = [
             result.entries = filteredEntries;
             return result;
         }
+    },
+    {
+        name: 'http://www.cafe-lentz.de/',
+        link: 'http://www.cafe-lentz.de/karte/15-karte/wochenkarte/42-wochenkarte',
+        request: {
+            options: {
+                host: 'www.cafe-lentz.de',
+                path: '/karte/15-karte/wochenkarte/42-wochenkarte'
+            },
+            body: null,
+        },
+        parse: function(service, data) {
+            $ = cheerio.load(data);
+            var table = $('tbody').filter(function(i, el) {
+                return $(this).html().contains('Mittagstisch');
+            }).first();
+
+            var entries = [];
+            var rows = table.find('td')
+            rows.each(function(i, el) {
+                var text = $(this).text().fulltrim();
+                if (text == "" || text.contains('X') || text.contains('Vorbestellung') || text.contains('Wochenkarte'))
+                    return;
+
+                // don't do more processing, just add the html from the original site
+                entries.push($(this).html())
+            });
+
+            // retrieve date information
+            // example: <span style="font-size: 14px;">Wochenkarte vom 18.08. - 22.08.</span>
+            var dateRegex = /<span.*Wochenkarte vom (.*?)<\/span>/;
+            var dateMatches = table.html().match(dateRegex);
+
+            var result = {}
+            result.date = dateMatches ? dateMatches[1] : null;
+            result.entries = entries;
+            return result;
+        }
     }
 ];
 
