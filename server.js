@@ -136,7 +136,7 @@ var App = function() {
 
     function callResolver(resolver, callback) {
         function createResult(resolver, data) {
-            result = {};
+            var result = {};
             result.name = resolver.name;
             result.link = resolver.link;
             result.data = data;
@@ -161,13 +161,13 @@ var App = function() {
                 buffer += decoder.write(chunk);
             });
             res.on('end', function() {
-                data = resolver.onData(buffer);
-                result = createResult(resolver, data);
+                var data = resolver.onData(buffer);
+                var result = createResult(resolver, data);
                 self.cache[resolver.name] = result
                 callback(null, result);
             });
         }).on('error', function(e) {
-            errorMessage = 'Failed to fetch URL: ' + url + '. Message: ' + e.message;
+            var errorMessage = 'Failed to fetch URL: ' + url + '. Message: ' + e.message;
             console.warn('Error: ' + errorMessage);
             result = createResult(resolver, {error: errorMessage});
             callback(null, result);
