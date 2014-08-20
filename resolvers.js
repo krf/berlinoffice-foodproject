@@ -173,7 +173,7 @@ var resolvers = [
                 var date = new Date().toISOString(); // YYYY-MM-DDTHH:mm:ss.sssZ
 
                 this.host = 'www.lpg-biomarkt.de',
-                this.path = '/wp-content/uploadds/' + date.slice(0, 4) + '/' + date.slice(5,7) + '/me' + date.slice(8,10) + '.jpg'
+                this.path = '/wp-content/uploads/' + date.slice(0, 4) + '/' + date.slice(5,7) + '/me' + date.slice(8,10) + '.jpg'
             }
         },
         onResponse: function(res) {
