@@ -148,9 +148,9 @@ var App = function() {
             var decoder = new StringDecoder('utf8');
 
             if (resolver.onResponse) {
-                var errorMessage = resolver.onResponse(res)
-                if (errorMessage) {
-                    result = createResult(resolver, {error: errorMessage});
+                var data = resolver.onResponse(res)
+                if (data) {
+                    var result = createResult(resolver, data)
                     callback(null, result);
                     return;
                 }

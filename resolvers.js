@@ -177,14 +177,11 @@ var resolvers = [
             }
         },
         onResponse: function(res) {
-            if (res.statusCode != 200) {
-                var imageUrl = this.request.options.host + this.request.options.path
-                return "Konnte heutige Tageskarte nicht finden (@ " + imageUrl + ")";
-            }
-            return null; // ok
-        },
-        onData: function(data) {
             var imageUrl = "http://" + this.request.options.host + this.request.options.path;
+
+            if (res.statusCode != 200) {
+                return {error: "Konnte heutige Tageskarte nicht finden (@ " + imageUrl + ")"};
+            }
 
             var result = {};
             result.html = '<a href="' + imageUrl + '">'
