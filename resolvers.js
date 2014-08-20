@@ -128,7 +128,7 @@ var resolvers = [
         }
     },
     {
-        name: 'http://www.cafe-lentz.de/',
+        name: 'www.cafe-lentz.de/',
         link: 'http://www.cafe-lentz.de/karte/15-karte/wochenkarte/42-wochenkarte',
         request: {
             options: {
