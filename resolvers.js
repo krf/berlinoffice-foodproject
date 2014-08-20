@@ -147,7 +147,7 @@ var resolvers = [
             var rows = table.find('td')
             rows.each(function(i, el) {
                 var text = $(this).text().fulltrim();
-                if (text == "" || text.contains('X') || text.contains('Vorbestellung') || text.contains('Wochenkarte'))
+                if (text == "" || text == 'X' || text.contains('Vorbestellung') || text.contains('Wochenkarte'))
                     return;
 
                 // don't do more processing, just add the html from the original site
