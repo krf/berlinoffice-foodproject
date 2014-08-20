@@ -13,7 +13,7 @@ var resolvers = [
             },
             body: null
         },
-        parse: function(service, data) {
+        onData: function(data) {
             // capture groups: (date)
             var startMenuSectionRegex = /\w+, ([0-9\.]+)/;
             var endMenuSectionString = "unsere salate";
@@ -56,7 +56,7 @@ var resolvers = [
             },
             body: null,
         },
-        parse: function(service, data) {
+        onData: function(data) {
             result = {};
 
             // unfortunately restaurant-so's HTML is *completely* messed up
@@ -98,7 +98,7 @@ var resolvers = [
             },
             body: 'pid=5603160&url=wauberlin&nurl=&is_following=false&design=montessori&template=escher'
         },
-        parse: function(service, data) {
+        onData: function(data) {
             var json = JSON.parse(data);
             var html = json.content;
             $ = cheerio.load(html);
@@ -137,7 +137,7 @@ var resolvers = [
             },
             body: null,
         },
-        parse: function(service, data) {
+        onData: function(data) {
             $ = cheerio.load(data);
             var table = $('tbody').filter(function(i, el) {
                 return $(this).html().contains('Mittagstisch');
@@ -183,7 +183,7 @@ var resolvers = [
             }
             return null; // ok
         },
-        parse: function(service, data) {
+        onData: function(data) {
             var imageUrl = "http://" + this.request.options.host + this.request.options.path;
 
             var result = {};

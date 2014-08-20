@@ -161,7 +161,7 @@ var App = function() {
                 buffer += decoder.write(chunk);
             });
             res.on('end', function() {
-                data = resolver.parse(resolver, buffer);
+                data = resolver.onData(buffer);
                 result = createResult(resolver, data);
                 self.cache[resolver.name] = result
                 callback(null, result);
