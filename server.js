@@ -147,6 +147,15 @@ var App = function() {
         req = http.request(resolver.request.options, function(res) {
             var decoder = new StringDecoder('utf8');
 
+            if (resolver.onResponse) {
+                var errorMessage = resolver.onResponse(res)
+                if (errorMessage) {
+                    result = createResult(resolver, {error: errorMessage});
+                    callback(null, result);
+                    return;
+                }
+            }
+
             var buffer = '';
             res.on('data', function(chunk) {
                 buffer += decoder.write(chunk);

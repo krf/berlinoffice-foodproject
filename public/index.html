@@ -15,17 +15,22 @@
                     (result.link ? '<a href="' + result.link + '">' + result.name + '</a>': result.name) +
                     (data.date ? ' (Stand: ' + data.date + ')' : '') +
                     '</h4>\n';
+
                 if (data.error) {
                     html += '<div class="alert-box error">';
-                    html += '<span>Error: </span>' + data.error;
+                    html += '<span>Fehler: </span>' + data.error;
                     html += '</div>';
+                    return;
                 }
+
                 if (data.info) {
                     html += '<div class="alert-box notice">';
                     html += '<span>Information: </span>' + data.info;
                     html += '</div>';
                 }
-                if (data.entries) {
+                if (data.html) {
+                    html += data.html
+                } else if (data.entries) {
                     html += '<ul>';
                     $.each(data.entries, function(i, entry) {
                         html += '<li>' + entry + '</li>';

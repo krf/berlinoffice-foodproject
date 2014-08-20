@@ -164,6 +164,34 @@ var resolvers = [
             result.entries = entries;
             return result;
         }
+    },
+    {
+        name: 'www.lpg-biomarkt.de',
+        link: 'http://www.lpg-biomarkt.de/unsere-markte-herzlich-willkommen/mehringdamm/#unser-angebot',
+        request: {
+            options: new function() {
+                var date = new Date().toISOString(); // YYYY-MM-DDTHH:mm:ss.sssZ
+
+                this.host = 'www.lpg-biomarkt.de',
+                this.path = '/wp-content/uploadds/' + date.slice(0, 4) + '/' + date.slice(5,7) + '/me' + date.slice(8,10) + '.jpg'
+            }
+        },
+        onResponse: function(res) {
+            if (res.statusCode != 200) {
+                var imageUrl = this.request.options.host + this.request.options.path
+                return "Konnte heutige Tageskarte nicht finden (@ " + imageUrl + ")";
+            }
+            return null; // ok
+        },
+        parse: function(service, data) {
+            var imageUrl = "http://" + this.request.options.host + this.request.options.path;
+
+            var result = {};
+            result.html = '<a href="' + imageUrl + '">'
+                + '<img style="width: auto; height: 600px" src="' + imageUrl + '"/>'
+                + '</a>'
+            return result;
+        }
     }
 ];
 
