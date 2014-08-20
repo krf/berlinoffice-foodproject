@@ -86,7 +86,7 @@ var resolvers = [
     },
     {
         name: 'www.wau-berlin.de',
-        link: 'http://www.wau-berlin.de/Tages-Abendkarte',
+        link: 'http://www.wau-berlin.de/Speisen',
         request: {
             options: {
                 host: 'www.wau-berlin.de',
@@ -110,7 +110,7 @@ var resolvers = [
             var filteredEntries = [];
             for (var i = 0; i < entries.length; ++i) {
                 entry = entries[i];
-                if (entry.contains('TAGESKARTE')) {
+                if (entry.contains('TAGESKARTE') || entry.contains('MITTAGSTISCH')) {
                     continue; // skip
                 }
                 if (entry === "") {
