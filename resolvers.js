@@ -15,7 +15,7 @@ var resolvers = [
         },
         onData: function(data) {
             // capture groups: (date)
-            var startMenuSectionRegex = /\w+, ([0-9\.]+)/;
+            var startMenuSectionRegex = /([0-9]{2}\.[0-9]{2}\.[0-9]{4})/;
             var endMenuSectionString = "unsere salate";
 
             $ = cheerio.load(data);
