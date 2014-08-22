@@ -144,13 +144,21 @@ var App = function() {
             return result;
         }
 
-        req = http.request(resolver.request.options, function(res) {
+        var query = {
+            options: resolver.request.options ? resolver.request.options : resolver.request.getOptions(),
+            body: resolver.request.body
+        }
+
+        // TODO: Let the result do the request on their own.
+        // We don't care *how* each resolver retrieves its data, hence don't hardcode the method here
+        req = http.request(query.options, function(res) {
             var decoder = new StringDecoder('utf8');
 
             if (resolver.onResponse) {
-                var data = resolver.onResponse(res)
+                var data = resolver.onResponse(query, res)
                 if (data) {
                     var result = createResult(resolver, data)
+                    self.cache[resolver.name] = result
                     callback(null, result);
                     return;
                 }
@@ -173,9 +181,9 @@ var App = function() {
             callback(null, result);
         });
 
-        if (resolver.request.body) {
-            req.setHeader('Content-Length', resolver.request.body.length)
-            req.write(resolver.request.body);
+        if (query.body) {
+            req.setHeader('Content-Length', query.body.length)
+            req.write(query.body);
         }
         req.end();
     }
