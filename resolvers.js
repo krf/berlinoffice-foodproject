@@ -191,6 +191,30 @@ var resolvers = [
                 + '</a>'
             return result;
         }
+    },
+    {
+        name: 'EatFirst',
+        link: 'https://www.eatfirst.de/',
+        request: {
+            options: {
+                host: 'www.eatfirst.de',
+                path: '/'
+            },
+        },
+        onData: function(data) {
+            var entries = [];
+
+            $ = cheerio.load(data);
+            $('.item').each(function(i, elem) {
+                var entry = $(this).find('.description').text().fulltrim()
+                    + " - " + $(this).find('.price').text().fulltrim();
+                entries.push(entry);
+            });
+
+            var result = {};
+            result.entries = entries;
+            return result;
+        }
     }
 ];
 
