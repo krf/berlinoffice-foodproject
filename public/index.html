@@ -30,7 +30,7 @@
                 }
                 if (data.html) {
                     html += data.html
-                } else if (data.entries) {
+                } else if (data.entries && data.entries.length > 0) {
                     html += '<ul>';
                     $.each(data.entries, function(i, entry) {
                         html += '<li>' + entry + '</li>';
