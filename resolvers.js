@@ -4,7 +4,7 @@ var _       = require("underscore");
 
 var resolvers = [
     {
-        name: 'www.cafe-rundum.de',
+        name: 'Cafe Rundum',
         link: 'http://www.cafe-rundum.de/deutsch/speisekarte.html',
         request: {
             options: {
@@ -47,7 +47,7 @@ var resolvers = [
         }
     },
     {
-        name: 'www.restaurant-so.de',
+        name: 'Restaurant So',
         link: 'http://www.restaurant-so.de/deutsch/tageskarte.htm',
         request: {
             options: {
@@ -85,7 +85,7 @@ var resolvers = [
         }
     },
     {
-        name: 'www.wau-berlin.de',
+        name: 'WAU',
         link: 'http://www.wau-berlin.de/Speisen',
         request: {
             options: {
@@ -128,7 +128,7 @@ var resolvers = [
         }
     },
     {
-        name: 'www.cafe-lentz.de/',
+        name: 'Cafe Lentz',
         link: 'http://www.cafe-lentz.de/karte/15-karte/wochenkarte/42-wochenkarte',
         request: {
             options: {
@@ -166,7 +166,7 @@ var resolvers = [
         }
     },
     {
-        name: 'www.lpg-biomarkt.de',
+        name: 'LPG Biomarkt',
         link: 'http://www.lpg-biomarkt.de/unsere-markte-herzlich-willkommen/mehringdamm/#unser-angebot',
         request: {
             getOptions: function() {
