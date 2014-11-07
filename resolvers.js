@@ -202,17 +202,22 @@ var resolvers = [
             },
         },
         onData: function(data) {
-            var entries = [];
+            var html = "<ul>";
 
             $ = cheerio.load(data);
             $('.item').each(function(i, elem) {
-                var entry = $(this).find('.description').text().fulltrim()
-                    + " - " + $(this).find('.price').text().fulltrim();
-                entries.push(entry);
+                var imageUrl = $(this).find('.image').css('background-image').replace("url('", "").replace("')", "");
+                html += "<li>"
+                    + $(this).find('.description').text().fulltrim()
+                    + ' - ' + $(this).find('.price').text().fulltrim()
+                    + '<br/><img src="' + imageUrl + '" style="width: 200px"/>'
+                    + '</li>'
             });
 
+            html += "</ul>";
+
             var result = {};
-            result.entries = entries;
+            result.html = html;
             return result;
         }
     }
