@@ -202,9 +202,13 @@ var resolvers = [
             },
         },
         onData: function(data) {
-            var html = "<ul>";
-
             $ = cheerio.load(data);
+
+            if ($('.item').length == 0) {
+                return {error: "(Noch) keine Gerichte vorhanden."};
+            }
+
+            var html = "<ul>";
             $('.item').each(function(i, elem) {
                 var imageUrl = $(this).find('.image').css('background-image').replace("url('", "").replace("')", "");
                 html += "<li>"
@@ -213,7 +217,6 @@ var resolvers = [
                     + '<br/><img src="' + imageUrl + '" style="width: 200px"/>'
                     + '</li>'
             });
-
             html += "</ul>";
 
             var result = {};
