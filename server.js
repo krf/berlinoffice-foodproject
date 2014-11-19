@@ -81,6 +81,8 @@ var App = function() {
         self.routes = {};
 
         self.routes['/json/query'] = function(req, res) {
+            console.log("Request from: " + req.ip);
+
             async.map(resolvers.resolvers, getResult, function(err, results) {
                 res.json({
                     error: err,
