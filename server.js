@@ -123,6 +123,8 @@ var App = function() {
     function getResult(resolver, callback) {
         var cacheEntry = self.cache[resolver.name];
         if (cacheEntry) {
+            console.log("CACHED: " + resolver.name)
+
             if (cacheEntry.timestamp > (new Date().getTime() - CACHE_PERIOD)) {
                 // cache hit, return cached result
                 cacheEntry.cached = true;
@@ -145,6 +147,8 @@ var App = function() {
             result.timestamp = new Date().getTime();
             return result;
         }
+
+        console.log("START: " + resolver.name)
 
         var query = {
             options: resolver.request.options ? resolver.request.options : resolver.request.getOptions(),
@@ -171,12 +175,16 @@ var App = function() {
                 buffer += decoder.write(chunk);
             });
             res.on('end', function() {
+                console.log("END: " + resolver.name)
+
                 var data = resolver.onData(buffer);
                 var result = createResult(resolver, data);
                 self.cache[resolver.name] = result
                 callback(null, result);
             });
         }).on('error', function(e) {
+            console.log("ERROR: " + resolver.name + " " + e.message)
+
             var errorMessage = 'Failed to fetch URL: ' + url + '. Message: ' + e.message;
             console.warn('Error: ' + errorMessage);
             result = createResult(resolver, {error: errorMessage});
