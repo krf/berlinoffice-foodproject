@@ -191,6 +191,12 @@ var App = function() {
             callback(null, result);
         });
 
+        req.setTimeout(5000);
+        req.on('timeout', function() {
+            console.log("TIMEOUT: " + resolver.name);
+            req.abort();
+        });
+
         if (query.body) {
             req.setHeader('Content-Length', query.body.length)
             req.write(query.body);
