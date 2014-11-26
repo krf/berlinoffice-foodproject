@@ -191,10 +191,12 @@ var App = function() {
             callback(null, result);
         });
 
-        req.setTimeout(5000);
-        req.on('timeout', function() {
-            console.log("TIMEOUT: " + resolver.name);
-            req.abort();
+        req.on('socket', function (socket) {
+            socket.setTimeout(5000);
+            socket.on('timeout', function() {
+                console.log("TIMEOUT: " + resolver.name);
+                req.abort();
+            });
         });
 
         if (query.body) {
