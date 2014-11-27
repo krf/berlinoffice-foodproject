@@ -123,16 +123,16 @@ var App = function() {
     function getResult(resolver, callback) {
         var cacheEntry = self.cache[resolver.name];
         if (cacheEntry) {
-            console.log("CACHED: " + resolver.name)
-
             if (cacheEntry.timestamp > (new Date().getTime() - CACHE_PERIOD)) {
+                console.log("CACHED: " + resolver.name)
+
                 // cache hit, return cached result
                 cacheEntry.cached = true;
                 return callback(null, cacheEntry);
             }
 
             // entry out of date, remove
-            delete cacheEntry;
+            delete self.cache[resolver.name];
         }
 
         return callResolver(resolver, callback);
@@ -161,11 +161,14 @@ var App = function() {
             var decoder = new StringDecoder('utf8');
 
             if (resolver.onResponse) {
+                console.log("ONRESPONSE: " + resolver.name)
+
                 var data = resolver.onResponse(query, res)
                 if (data) {
                     var result = createResult(resolver, data)
                     self.cache[resolver.name] = result
                     callback(null, result);
+                    req.abort();
                     return;
                 }
             }
@@ -175,14 +178,16 @@ var App = function() {
                 buffer += decoder.write(chunk);
             });
             res.on('end', function() {
-                console.log("END: " + resolver.name)
+                console.log("ONDATA: " + resolver.name)
 
                 var data = resolver.onData(buffer);
                 var result = createResult(resolver, data);
                 self.cache[resolver.name] = result
                 callback(null, result);
             });
-        }).on('error', function(e) {
+        });
+
+        req.on('error', function(e) {
             console.log("ERROR: " + resolver.name + " " + e.message)
 
             var errorMessage = 'Failed to fetch URL: ' + url + '. Message: ' + e.message;
@@ -195,9 +200,11 @@ var App = function() {
             socket.setTimeout(5000);
             socket.on('timeout', function() {
                 console.log("TIMEOUT: " + resolver.name);
+
                 req.abort();
             });
         });
+
 
         if (query.body) {
             req.setHeader('Content-Length', query.body.length)
