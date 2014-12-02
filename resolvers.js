@@ -174,7 +174,7 @@ var resolvers = [
 
                 return {
                     host: 'www.lpg-biomarkt.de',
-                    path: '/wp-content/uploads/' + date.slice(0, 4) + '/' + date.slice(5,7) + '/me' + date.slice(8,10) + '.jpg'
+                    path: '/wp-content/uploads/' + date.slice(0, 4) + '/' + date.slice(5,7) + '/ME.jpg'
                 }
             }
         },
