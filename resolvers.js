@@ -165,6 +165,7 @@ var resolvers = [
             return result;
         }
     },
+    /*
     {
         name: 'LPG Biomarkt',
         link: 'http://www.lpg-biomarkt.de/unsere-markte-herzlich-willkommen/mehringdamm/#unser-angebot',
@@ -192,6 +193,7 @@ var resolvers = [
             return result;
         }
     },
+    */
     {
         name: 'EatFirst',
         link: 'https://www.eatfirst.de/',
