@@ -212,7 +212,11 @@ var resolvers = [
 
             var html = "<ul>";
             $('.item').each(function(i, elem) {
-                var imageUrl = $(this).find('.image').css('background-image').replace("url('", "").replace("')", "");
+                var image = $(this).find('.image');
+                if (image.length == 0)
+                    return false; // break
+
+                var imageUrl = image.css('background-image').replace("url('", "").replace("')", "");
                 html += "<li>"
                     + $(this).find('.description').text().fulltrim()
                     + ' - ' + $(this).find('.price').text().fulltrim()
